@@ -1,19 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* .bg-primary {
-    @apply bg-[#1B0B54]
-}
-
-.bg-secondary {
-    @apply bg-[#2f275f]
-} */
-
-.btn-bg-primary {
-    @apply bg-[#4A90E2]
-}
-
-.btn-bg-secondary{
-    @apply bg-[#4A4A4A]
-}

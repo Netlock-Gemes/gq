@@ -10,21 +10,6 @@ const AuthState = (props) => {
     const [isLogin, setIsLogin] = useState(false);
 
     const navigate = useNavigate();
-    const checkLogin = () => {
-        if (!localStorage.getItem('token')) {
-            setIsLogin(true);
-            navigate('/login');
-        }
-    }
-
-
-
-
-
-
-
-
-
 
     const [loggedInUserData, setLoggedInUserData] = useState([]);
 
@@ -44,6 +29,7 @@ const AuthState = (props) => {
         });
         const data = await response.json();
         if (response.ok) {
+            setIsLogin(true);
             setLoggedInUserData(data);
         } else {
             // toast.error(data.msg || "Failed to fetch profile data", {
@@ -53,6 +39,14 @@ const AuthState = (props) => {
             // navigate('/login');
         }
     };
+
+    const checkLogin = () => {
+        getLoggedInUserData().then(() => {
+            if (!isLogin) {
+                navigate('/login');
+            }
+        }
+    )}
 
     return (
         <authContext.Provider value={{ checkLogin, getLoggedInUserData, loggedInUserData, setLoggedInUserData, isLogin, setIsLogin }}>

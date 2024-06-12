@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Register from './components/Register';
 import Profile from './components/Profile';
 import AuthState from './context/auth/AuthState';
+import Spin from './components/Spin';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path='/' element={<Home />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/spin" element={<Spin />} />
           </Routes>
         </AuthState>
       </Router>

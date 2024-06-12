@@ -7,7 +7,7 @@ import authContext from '../context/auth/authContext';
 const Navbar = () => {
     const { isLogin, setIsLogin, checkLogin } = useContext(authContext);
 
-    useEffect(()=>{
+    useEffect(() => {
         checkLogin();
     }, [isLogin])
 
@@ -48,16 +48,27 @@ const Navbar = () => {
                         <div ref={dropdownRef} className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex="-1">
                                 {isLogin ? (
-                                    <button
-                                        className="flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full "
-                                        onClick={() => {
-                                            setIsLogin(false);
-                                            localStorage.clear();
-                                            handleMenuClick('Button 1')
-                                        }}
-                                    >
-                                        Logout
-                                    </button>
+                                    <>
+                                        <Link to={'/profile'}
+                                            className="flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full border-t"
+                                            role="menuitem"
+                                            tabIndex="-1"
+                                            onClick={() => handleMenuClick('Button 1')}
+                                        >
+                                            Profile
+                                        </Link>
+                                        <button
+                                            className="flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full "
+                                            onClick={() => {
+                                                setIsLogin(false);
+                                                localStorage.clear();
+                                                handleMenuClick('Button 1')
+                                            }}
+                                        >
+                                            Logout
+                                        </button>
+                                    </>
+
                                 ) : (
                                     <Link to={'/login'}
                                         className="flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full "
