@@ -32,7 +32,6 @@ const Navbar = () => {
     }, []);
 
     const handleMenuClick = (menuOption) => {
-        console.log(`Clicked ${menuOption}`);
         setIsDropdownOpen(false);
     };
 
