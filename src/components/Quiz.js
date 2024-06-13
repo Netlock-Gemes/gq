@@ -12,8 +12,7 @@ const Quiz = () => {
     const [showScore, setShowScore] = useState(false);
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(10);
-    const { checkLogin } = useContext(authContext);
-
+    const { checkLogin, loggedInUserData } = useContext(authContext);
 
     const questions = questionsData[category] || [];
 
@@ -23,7 +22,7 @@ const Quiz = () => {
                 setTimeLeft(timeLeft - 1);
             }, 1000);
             return () => clearInterval(timerId);
-        } else {
+        } else if (timeLeft === 0) {
             handleNextQuestion();
         }
     }, [timeLeft, questions]);
@@ -32,25 +31,57 @@ const Quiz = () => {
         checkLogin();
     }, []);
 
-
     const handleAnswerOptionClick = (isCorrect) => {
         const updatedSelectedAnswers = [...selectedAnswers];
         updatedSelectedAnswers[currentQuestionIndex] = isCorrect;
         setSelectedAnswers(updatedSelectedAnswers);
-        handleNextQuestion();
+        if (currentQuestionIndex < questions.length - 1) {
+            handleNextQuestion();
+        } else {
+            calculateScore(updatedSelectedAnswers);
+        }
     };
 
     const handleNextQuestion = () => {
-        const nextQuestionIndex = currentQuestionIndex + 1;
-        if (nextQuestionIndex < questions.length) {
-            setCurrentQuestionIndex(nextQuestionIndex);
+        if (currentQuestionIndex < questions.length - 1) {
+            setCurrentQuestionIndex(prevIndex => prevIndex + 1);
             setTimeLeft(10); // Reset timer for next question
         } else {
-            const updatedSelectedAnswers = [...selectedAnswers];
-            updatedSelectedAnswers[currentQuestionIndex] = true; // Update selectedAnswers for the last question
-            const calculatedScore = updatedSelectedAnswers.filter(answer => answer === true).length;
-            setScore(calculatedScore);
-            setShowScore(true);
+            calculateScore(selectedAnswers);
+        }
+    };
+
+    const calculateScore = (answers) => {
+        const calculatedScore = answers.filter(answer => answer === true).length;
+        setScore(calculatedScore);
+        setShowScore(true);
+
+        // Check if the new score is higher and submit it
+        const existingScore = loggedInUserData.score[category.toLowerCase()] || 0;
+        if (calculatedScore > existingScore) {
+            submitScore(category.toLowerCase(), calculatedScore);
+        }
+    };
+
+    const submitScore = async (category, score) => {
+        try {
+            const response = await fetch('http://localhost:5000/api/auth/submit-score', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': localStorage.getItem('token'),
+                },
+                body: JSON.stringify({ category, score })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit score');
+            }
+
+            const result = await response.json();
+            console.log('Score submitted successfully:', result);
+        } catch (error) {
+            console.error('Error submitting score:', error);
         }
     };
 
@@ -73,15 +104,15 @@ const Quiz = () => {
                 <div className='text-2xl flex flex-col justify-center items-center text-white'>
                     {
                         score > 5 ? <div className='text-4xl flex flex-col justify-center items-center font-semibold'>
-
                             <ConfettiExplosion />
-                            <span>Congratulations 🎉</span>
+                            <span className='text-[#07E1E6]'>Congratulations 🎉</span>
                             <span>You scored {score} out of {questions.length}</span>
                         </div> : <div className='text-4xl flex flex-col justify-center items-center font-semibold'>
-                            <span>Too Bad 😔</span>
+                            <span className='text-[#07E1E6]'>Too Bad 😔</span>
                             <span>You scored {score} out of {questions.length}</span>
                         </div>
                     }
+                    <Link to={'/spin'} className='flex justify-center items-center w-64 bg-primary rounded-xl text-[#07E1E6] p-2 shadow-sm hover:shadow-teal-300 font-bold text-xl border hover:border-transparent mt-6'>Return to Subjects</Link>
                 </div>
             ) : (
                 <div className='flex flex-col justify-center items-center w-1/2 border p-20 rounded-xl relative bg-[#392f6f] shadow-lg shadow-teal-800'>

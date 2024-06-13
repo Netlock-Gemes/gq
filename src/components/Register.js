@@ -109,7 +109,6 @@ const Register = () => {
                             Sign up
                         </button>
                     </div>
-                    <p className={`text-white transition ease-in-out duration-500 text-sm cursor-pointer text-center mt-3`}>Forgot password?</p>
                 </form>
             </div>
         </div>

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 const AuthState = (props) => {
     const [isLogin, setIsLogin] = useState(false);
     const [loggedInUserData, setLoggedInUserData] = useState([]);
+    const [allUsersData, setAllUsersData] = useState([]);
     const navigate = useNavigate();
 
     const getLoggedInUserData = async () => {
@@ -45,6 +46,27 @@ const AuthState = (props) => {
         }
     };
 
+    const getAllUsersData = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/auth/getUsersData', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setAllUsersData(data);
+            } else {
+                console.log(data);
+            }
+        } catch (error) {
+            console.error('Error fetching users data:', error);
+        }
+    };
+
     const checkLogin = async () => {
         await getLoggedInUserData();
         if (!isLogin) {
@@ -54,7 +76,7 @@ const AuthState = (props) => {
     };
 
     return (
-        <authContext.Provider value={{ checkLogin, getLoggedInUserData, loggedInUserData, setLoggedInUserData, isLogin, setIsLogin }}>
+        <authContext.Provider value={{ checkLogin, getLoggedInUserData, loggedInUserData, setLoggedInUserData, isLogin, setIsLogin, getAllUsersData, allUsersData }}>
             {props.children}
         </authContext.Provider>
     );

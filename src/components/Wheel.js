@@ -26,12 +26,14 @@ const WheelComponent = ({
   let frames = 0;
   const centerX = 300;
   const centerY = 300;
+
   useEffect(() => {
     wheelInit();
     setTimeout(() => {
       window.scrollTo(0, 1);
     }, 0);
   }, []);
+
   const wheelInit = () => {
     initCanvas();
     wheelDraw();
@@ -49,16 +51,17 @@ const WheelComponent = ({
     canvas.addEventListener("click", spin, false);
     canvasContext = canvas.getContext("2d");
   };
+
   const spin = () => {
     isStarted = true;
     if (timerHandle === 0) {
       spinStart = new Date().getTime();
-      // maxSpeed = Math.PI / ((segments.length*2) + Math.random())
       maxSpeed = Math.PI / segments.length;
       frames = 0;
       timerHandle = setInterval(onTimerTick, timerDelay);
     }
   };
+
   const onTimerTick = () => {
     frames++;
     draw();
@@ -127,7 +130,7 @@ const WheelComponent = ({
     ctx.translate(centerX, centerY);
     ctx.rotate((lastAngle + angle) / 2);
     ctx.fillStyle = contrastColor || "white";
-    ctx.font = "bold 1em";
+    ctx.font = "bold 1em Arial";
     ctx.fillText(value.substr(0, 21), size / 2 + 20, 0);
     ctx.restore();
   };
@@ -141,7 +144,7 @@ const WheelComponent = ({
     ctx.strokeStyle = primaryColor || "black";
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
-    ctx.font = "1em proxima-nova";
+    ctx.font = "1em Arial";
     for (let i = 1; i <= len; i++) {
       const angle = PI2 * (i / len) + angleCurrent;
       drawSegment(i - 1, lastAngle, angle);
@@ -156,7 +159,7 @@ const WheelComponent = ({
     ctx.lineWidth = 10;
     ctx.strokeStyle = contrastColor || "white";
     ctx.fill();
-    ctx.font = "bold 1em proxima-nova";
+    ctx.font = "bold 1em Arial";
     ctx.fillStyle = contrastColor || "white";
     ctx.textAlign = "center";
     ctx.fillText(buttonText || "Spin", centerX, centerY + 3);
@@ -176,7 +179,7 @@ const WheelComponent = ({
     const ctx = canvasContext;
     ctx.lineWidth = 1;
     ctx.strokeStyle = contrastColor || "white";
-    ctx.fileStyle = contrastColor || "white";
+    ctx.fillStyle = contrastColor || "white";
     ctx.beginPath();
     ctx.moveTo(centerX + 20, centerY - 50);
     ctx.lineTo(centerX - 20, centerY - 50);
@@ -192,24 +195,28 @@ const WheelComponent = ({
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = primaryColor || "black";
-    ctx.font = "bold 2.5em proxima-nova";
+    ctx.font = "bold 2.5em Arial";
     currentSegment = segments[i];
     isFinished &&
       ctx.fillText(currentSegment, centerX + 10, centerY + size + 50);
   };
+
   const clear = () => {
     const ctx = canvasContext;
     ctx.clearRect(0, 0, 1000, 500);
   };
+
   return (
     <canvas
       id="canvas"
       width="600"
       height="600"
+      className="cursor-pointer"
       style={{
         pointerEvents: isFinished && !isOnlyOnce ? "none" : "auto"
       }}
     />
   );
 };
+
 export default WheelComponent;

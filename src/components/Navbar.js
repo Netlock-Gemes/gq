@@ -41,7 +41,9 @@ const Navbar = () => {
                 <Link to={'/'} className='sm:ml-4 text-md sm:text-xl font-bold text-center w-24 sm:w-fit'><img src={logo} className='sm:w-32 h-18 rounded-xl' alt="social parivartan" /></Link>
             </div>
             <div className='flex text-md sm:text-xl gap-1 sm:gap-4'>
-                <span className='flex justify-center items-center font-semibold text-[#07E1E6]'>{loggedInUserData.name}</span>
+                {
+                    isLogin && <span className='flex justify-center items-center font-semibold text-[#07E1E6]'>{loggedInUserData.name}</span>
+                }
                 <div className="relative mr-4">
                     <img src={blankprofile} alt="profile" className='h-10 w-10 rounded-full cursor-pointer' onClick={handleProfileClick} />
                     {isDropdownOpen && (
@@ -71,7 +73,7 @@ const Navbar = () => {
 
                                 ) : (
                                     <Link to={'/login'}
-                                        className="flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full "
+                                        className="flex px-4 py-2 text-sm text-gray-700 hover:bg-[#07e2e688] hover:text-gray-900 w-full "
                                         role="menuitem"
                                         tabIndex="-1"
                                         onClick={() => handleMenuClick('Button 1')}
