@@ -1,8 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import quizContext from '../context/quiz/quizContext';
 import { questionsData } from '../constants/questionsData';
 import ConfettiExplosion from 'react-confetti-explosion';
+import authContext from '../context/auth/authContext';
 
 const Quiz = () => {
     const { category } = useContext(quizContext);
@@ -11,7 +12,8 @@ const Quiz = () => {
     const [showScore, setShowScore] = useState(false);
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(10);
-    const navigate = useNavigate();
+    const { checkLogin } = useContext(authContext);
+
 
     const questions = questionsData[category] || [];
 
@@ -25,6 +27,11 @@ const Quiz = () => {
             handleNextQuestion();
         }
     }, [timeLeft, questions]);
+
+    useEffect(() => {
+        checkLogin();
+    }, []);
+
 
     const handleAnswerOptionClick = (isCorrect) => {
         const updatedSelectedAnswers = [...selectedAnswers];
