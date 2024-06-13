@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import WheelComponent from './Wheel';
+import { Link } from 'react-router-dom';
+import quizContext from '../context/quiz/quizContext';
 
 
 const Spin = () => {
@@ -11,10 +13,12 @@ const Spin = () => {
         "Economics",
     ];
     const segColors = ["#EE4040", "#F0CF50", "#815CD1", "#3DA5E0", "#34A24F"];
-    const [winner, setWinner] = useState();
-    const onFinished = (winner) => {
-        setWinner(winner);
-        console.log(winner);
+    // const [category, setCategory] = useState();
+    const { category, setCategory } = useContext(quizContext);
+
+    const onFinished = (category) => {
+        setCategory(category);
+        console.log(category);
     };
 
     return (
@@ -23,7 +27,7 @@ const Spin = () => {
                 <WheelComponent
                     segments={segments}
                     segColors={segColors}
-                    onFinished={(winner) => onFinished(winner)}
+                    onFinished={(category) => onFinished(category)}
                     primaryColor="black"
                     contrastColor="white"
                     buttonText="Spin"
@@ -40,11 +44,17 @@ const Spin = () => {
                 <div>
 
                     {
-                        !winner ?
-                        <span className='text-gray-200 mb-2 flex justify-center items-center'>⚠️Spin that wheel first</span> :
-                        <span className='text-gray-200 mb-2 flex justify-center items-center'>󠀽</span>
+                        !category ?
+                            <span className='text-gray-200 mb-2 flex justify-center items-center'>⚠️Spin that wheel first</span> :
+                            <span className='text-gray-200 mb-2 flex justify-center items-center'>󠀽</span>
                     }
-                    <button disabled={winner ? false : true} className='flex justify-center items-center w-64 bg-primary rounded-xl text-[#07E1E6] p-2 shadow-sm hover:shadow-teal-300 font-bold text-xl border hover:border-transparent disabled:text-opacity-30 disabled:border-none'>Start Quiz of {winner}</button>
+                    {!category ?
+                        <button disabled className='flex justify-center items-center w-64 bg-primary rounded-xl text-[#07E1E6] p-2 shadow-sm font-bold text-xl border text-opacity-30'> Start Quiz
+                        </button> :
+                        <Link to={'/quiz'} className='flex justify-center items-center w-64 bg-primary rounded-xl text-[#07E1E6] p-2 shadow-sm hover:shadow-teal-300 font-bold text-xl border hover:border-transparent'>
+                            Start Quiz of {category}
+                        </Link>
+                    }
                 </div>
             </div>
         </div>
