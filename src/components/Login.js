@@ -32,7 +32,7 @@ const Login = () => {
             toast.success("Login successful!", {
                 autoClose: 2000,
             });
-            setTimeout(() => navigate('/'), 2000); // Redirect after 2 seconds
+            setTimeout(() => navigate('/'), 2000);
         } else {
             toast.error(data.msg || "Login failed. Please try again.", {
                 autoClose: 2000,
@@ -58,11 +58,10 @@ const Login = () => {
     const [isMsgVisible, setIsMsgVisible] = useState("flex");
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-secondary relative">
-            <ToastContainer />
-            <div className="absolute inset-0 bg-cover bg-center z-0" style={{ backgroundImage: "url('/path-to-your-background-image.jpg')" }}></div>
-            <div className="bg-primary p-8 rounded-xl shadow-[0px_0px_20px_0px] shadow-[#30C7D6] w-full max-w-md z-10">
-                <label className={`text-white text-3xl items-center justify-center form-label transition ease-in-out duration-500 flex mb-4 font-bold`}>Login</label>
+        <div className="min-h-screen flex items-center justify-center bg-secondary relative p-4 md:p-0">
+            <ToastContainer theme="dark" />
+            <div className="bg-primary p-6 md:p-8 rounded-xl shadow-[0px_0px_20px_0px] shadow-[#30C7D6] w-full max-w-md z-10">
+                <label className={`text-white text-2xl md:text-3xl items-center justify-center form-label transition ease-in-out duration-500 flex mb-4 font-bold`}>Login</label>
                 <form onSubmit={handleSubmit}>
                     {/* Email */}
                     <div className="mb-6">
@@ -78,12 +77,12 @@ const Login = () => {
                     </div>
 
                     {/* Password */}
-                    <div className="mb-6 relative">
+                    <div className="mb-6">
                         <div className='flex justify-between'>
                             <label htmlFor='password' className={`text-white text-xl form-label transition ease-in-out duration-500 inline-block mb-2 font-semibold`}>Password</label>
-                            <button type="button" className="absolute right-3 top-10">
-                                <FaEyeSlash onClick={togglePass} className={`${hideEyeSlash} text-white transition ease-in-out duration-500 h-5 w-5`} />
-                                <FaEye onClick={togglePass} className={`${hideEye} text-white transition ease-in-out duration-500 h-5 w-5`} />
+                            <button type="button">
+                                <FaEyeSlash onClick={togglePass} className={`${hideEyeSlash} text-white transition ease-in-out duration-500 h-5 w-5 mr-2 mt-2`} />
+                                <FaEye onClick={togglePass} className={`${hideEye} text-white transition ease-in-out duration-500 h-5 w-5 mr-2 mt-2`} />
                             </button>
                         </div>
                         <input id="password" type={`${showPass}`} onChange={onChange} value={credentials.password} name="password"
@@ -92,26 +91,24 @@ const Login = () => {
                     </div>
 
                     {/* Button */}
-                    <div className="flex justify-center mb-4">
+                    <div className="flex justify-center">
                         <button type='submit'
                             className="w-full px-2 py-3 md:py-2.5 bg-blue-600 text-white font-semibold text-lg leading-tight rounded shadow-md md:hover:bg-blue-800 hover:shadow-lg focus:bg-blue-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-600 active:shadow-lg active:text-gray-400 transition duration-150 ease-in-out">
                             Login
                         </button>
                     </div>
-
-                    <div className="flex justify-center mb-4">
-                        <p className={`text-white transition ease-in-out duration-500 text-sm cursor-pointer text-center`}>Forgot password?</p>
-                    </div>
                 </form>
             </div>
 
             {/* Welcome Message */}
-            <div className={` ${isMsgVisible} flex-col fixed bottom-1 text-center px-4 py-6 bg-white bg-opacity-80 rounded-lg shadow-lg z-10`}>
-                <button className='flex w-full justify-end text-2xl' onClick={()=>setIsMsgVisible("hidden")}><IoMdClose /></button>
-                <h2 className="text-3xl font-bold text-blue-600 mb-4">Welcome to Gamified Quiz!</h2>
-                <p className="text-gray-700 text-lg mb-4">Join our platform to test your knowledge, earn rewards, and compete with others in a fun and engaging way. Sign up today and start your journey towards becoming a quiz master!</p>
-                <p className="text-gray-700 text-lg mb-4">Don't have an account? <Link to="/register" className="text-blue-600 underline">Register here</Link> to get started.</p>
-                <p className="text-gray-700 text-lg">Already a member? Log in to access your personalized dashboard and continue your learning adventure.</p>
+            <div className={` ${isMsgVisible} flex-col fixed bottom-1 text-center px-4 py-6 bg-white bg-opacity-80 rounded-lg shadow-lg z-10 md:text-lg text-sm`}>
+                <div className='flex w-full justify-end '>
+                    <button className='text-2xl hover:bg-teal-300/20 mr-2 rounded-md' onClick={() => setIsMsgVisible("hidden")}><IoMdClose /></button>
+                </div>
+                <h2 className="md:text-3xl text-2xl font-bold text-blue-600 mb-4">Welcome to Gamified Quiz!</h2>
+                <p className="text-gray-700 mb-4">Join our platform to test your knowledge, earn rewards, and compete with others in a fun and engaging way. Sign up today and start your journey towards becoming a quiz master!</p>
+                <p className="text-gray-700 mb-4">Don't have an account? <Link to="/register" className="text-blue-600 underline">Register here</Link> to get started.</p>
+                <p className="text-gray-700">Already a member? Log in to access your personalized dashboard and continue your learning adventure.</p>
             </div>
         </div>
     );

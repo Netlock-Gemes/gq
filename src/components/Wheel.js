@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const WheelComponent = ({
+  size,
   segments,
   segColors,
   winningSegment,
@@ -17,7 +18,7 @@ const WheelComponent = ({
   const timerDelay = segments.length;
   let angleCurrent = 0;
   let angleDelta = 0;
-  const size = 230;
+  // const size = 230;
   let canvasContext = null;
   let maxSpeed = Math.PI / `${segments.length}`;
   const upTime = segments.length * 100;

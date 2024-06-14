@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authContext from './authContext';
-import { toast } from 'react-toastify';
 
 const AuthState = (props) => {
     const [isLogin, setIsLogin] = useState(false);
@@ -13,6 +12,7 @@ const AuthState = (props) => {
         const token = localStorage.getItem('token');
         if (!token) {
             navigate('/login');
+            setIsLogin(false);
             return;
         }
 
@@ -31,19 +31,17 @@ const AuthState = (props) => {
                 setIsLogin(true);
                 setLoggedInUserData(data);
             } else {
-                toast.error(data.msg || "Failed to fetch profile data", {
-                    autoClose: 2000,
-                });
                 console.log(data);
                 navigate('/login');
             }
         } catch (error) {
             console.error('Error fetching profile data:', error);
-            toast.error('An error occurred while fetching profile data', {
-                autoClose: 2000,
-            });
             navigate('/login');
         }
+    };
+
+    const checkLogin = async () => {
+        await getLoggedInUserData();
     };
 
     const getAllUsersData = async () => {
@@ -67,13 +65,6 @@ const AuthState = (props) => {
         }
     };
 
-    const checkLogin = async () => {
-        await getLoggedInUserData();
-        if (!isLogin) {
-            console.log(isLogin);
-            // navigate('/login');
-        }
-    };
 
     return (
         <authContext.Provider value={{ checkLogin, getLoggedInUserData, loggedInUserData, setLoggedInUserData, isLogin, setIsLogin, getAllUsersData, allUsersData }}>
