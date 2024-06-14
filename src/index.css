@@ -12,5 +12,5 @@
 }
 
 .animate-slow-spin {
-  animation: slow-spin 10s linear infinite; /* 10 seconds for one complete rotation */
+  animation: slow-spin 30s linear infinite; /* 10 seconds for one complete rotation */
 }

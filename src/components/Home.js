@@ -59,10 +59,10 @@ function Home() {
           onChange={(e) => setSelectedSubject(e.target.value)}
         >
           <option value="economics">Economics</option>
-          <option value="IT">IT</option>
+          <option value="it">IT</option>
           <option value="history">History</option>
           <option value="science">Science</option>
-          <option value="GK">GK</option>
+          <option value="gk">GK</option>
         </select>
         {renderLeaderboard()}
       </div>

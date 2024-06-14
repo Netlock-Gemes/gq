@@ -4,6 +4,9 @@ import quizContext from '../context/quiz/quizContext';
 import { questionsData } from '../constants/questionsData';
 import ConfettiExplosion from 'react-confetti-explosion';
 import authContext from '../context/auth/authContext';
+import circle from '../assets/circle.png';
+import { MdOutlineAccessTime } from "react-icons/md";
+
 
 const Quiz = () => {
     const { category } = useContext(quizContext);
@@ -98,19 +101,32 @@ const Quiz = () => {
     }
 
     return (
-        <div className='bg-secondary flex flex-col justify-center items-center min-h-screen pb-10 px-4'>
+        <div className='bg-secondary flex flex-col justify-center items-center min-h-screen pb-10 px-4 relative'>
+            <div className='fixed hidden md:flex left-auto md:left-7 top-24 opacity-25 md:opacity-35 overflow-hidden'>
+                <img src={circle} alt="circle-left" className='animate-slow-spin' />
+            </div>
+            <div className='fixed hidden md:flex right-7 top-24 opacity-35 overflow-hidden'>
+                <img src={circle} alt="circle-right" className='animate-slow-spin' />
+            </div>
+            <div className='fixed md:flex justify-center left-auto opacity-25 md:opacity-35 overflow-hidden w-[600px] h-[600px] md:w-full md:h-full z-0'>
+                <img src={circle} alt="circle-center" className='animate-slow-spin w-full h-full md:w-fit' />
+            </div>
             {showScore ? (
-                <div className='text-2xl flex flex-col justify-center items-center text-white'>
+                <div className='text-2xl flex flex-col justify-center items-center text-white z-30'>
                     {score > 5 ? (
-                        <div className='text-2xl md:text-4xl flex flex-col justify-center items-center font-semibold'>
+                        <div className='font-serif text-2xl md:text-4xl flex flex-col justify-center items-center font-semibold'>
                             <ConfettiExplosion />
-                            <span className='text-[#07E1E6]'>Congratulations 🎉</span>
-                            <span>You scored {score} out of {questions.length}</span>
+                            <span className='text-green-400'>Congrats {loggedInUserData?.name} 🎉</span>
+                            <span>You scored <span className='text-green-400'>{score}</span> out of {questions.length}</span>
+                            <span className='text-base font-sans'>Try your skills in different subjects</span>
+                            <span className='font-sans text-xl mt-3'>⬇️Play Again⬇️</span>
                         </div>
                     ) : (
-                        <div className='text-2xl md:text-4xl flex flex-col justify-center items-center font-semibold'>
-                            <span className='text-[#07E1E6]'>Too Bad 😔</span>
-                            <span>You scored {score} out of {questions.length}</span>
+                        <div className='font-serif text-2xl md:text-4xl flex flex-col justify-center items-center font-semibold'>
+                            <span className='text-red-600'>Too Bad {loggedInUserData?.name} 😔</span>
+                            <span>You only scored <span className='text-red-600'>{score}</span> out of {questions.length}</span>
+                            <span className='text-base font-sans'>You need to work on your skills</span>
+                            <span className='font-sans text-xl mt-3'>⬇️Try Again⬇️</span>
                         </div>
                     )}
                     <Link to={'/spin'} className='flex justify-center items-center w-64 bg-primary rounded-xl text-[#07E1E6] p-2 shadow-sm hover:shadow-teal-300 font-bold text-xl border hover:border-transparent mt-6'>
@@ -129,11 +145,11 @@ const Quiz = () => {
                     </div>
 
                     <div className='absolute top-4 left-4 text-white'>
-                        Question {currentQuestionIndex + 1} of {questions.length}
+                        Question: <span className='font-semibold text-green-400'>{currentQuestionIndex + 1}</span>
                     </div>
 
-                    <div className='absolute top-4 right-4 text-white'>
-                        Time Left: {timeLeft} seconds
+                    <div className='absolute flex justify-center items-center top-4 right-4 text-white'>
+                        Time <MdOutlineAccessTime className='mx-1 h-5 w-5' /> Left: <span className='font-semibold ml-1 text-green-400 w-15'>{timeLeft} sec</span>
                     </div>
 
                     <div className='text-2xl text-white mb-4'>

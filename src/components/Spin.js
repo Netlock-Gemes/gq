@@ -3,6 +3,7 @@ import WheelComponent from './Wheel';
 import { Link } from 'react-router-dom';
 import quizContext from '../context/quiz/quizContext';
 import authContext from '../context/auth/authContext';
+import circle from '../assets/circle.png';
 
 const Spin = () => {
     const segments = [
@@ -16,7 +17,6 @@ const Spin = () => {
     const { category, setCategory } = useContext(quizContext);
     const { checkLogin, loggedInUserData } = useContext(authContext);
     const [funFact, setFunFact] = useState('');
-
 
     const onFinished = (category) => {
         setCategory(category);
@@ -43,18 +43,25 @@ const Spin = () => {
         return { highestScore, quizzesCompleted, bestCategory };
     };
 
-
     const { highestScore, quizzesCompleted, bestCategory } = calculateAchievements(loggedInUserData);
-
 
     return (
         <div className='bg-secondary flex flex-col w-full justify-center items-center min-h-screen pb-10'>
-            <div className='flex flex-col items-center xl:w-3/4 w-full'>
+            <div className='fixed hidden md:flex left-auto md:left-7 top-24 opacity-20 overflow-hidden'>
+                <img src={circle} alt="circle-left" className='animate-slow-spin' />
+            </div>
+            <div className='fixed hidden md:flex right-7 top-24 overflow-hidden opacity-20'>
+                <img src={circle} alt="circle-right" className='animate-slow-spin' />
+            </div>
+            <div className='fixed md:flex justify-center left-auto top-20 opacity-20 overflow-hidden w-[600px] h-[600px] md:w-full md:h-full z-0'>
+                <img src={circle} alt="circle-center" className='animate-slow-spin w-full h-full md:w-fit' />
+            </div>
+            <div className='flex flex-col items-center xl:w-3/4 w-full z-30'>
                 <div className='flex justify-center items-center font-bold text-[#07E1E6] text-2xl md:text-3xl mt-7 mb-3'>
                     Hello {loggedInUserData?.name}!🎯
                 </div>
                 {funFact && (
-                    <div className='text-gray-200 text-center mb-2 w-2/3 md:w-full'>
+                    <div className='text-white font-semibold text-center mb-2 w-2/3 md:w-full'>
                         <em>"{funFact}"</em>
                     </div>
                 )}
@@ -87,8 +94,8 @@ const Spin = () => {
                             }
                         </div>
                         <div className='flex flex-col items-center mt-8'>
-                            <h2 className='text-[#F0EEF2] font-bold text-2xl mb-4'>Your Achievements</h2>
-                            <div className='bg-primary flex flex-col items-center justify-center rounded-md p-4 md:w-80 w-72'>
+                            <h2 className='text-[#F0EEF2] font-bold text-2xl mb-4 '>Your Achievements</h2>
+                            <div className='bg-primary flex flex-col items-center justify-center rounded-md p-4 md:w-80 w-72 shadow-[0px_0px_20px_0px] shadow-[#30C7D6]'>
                                 <p className='text-white flex justify-between w-full px-4'><span>Highest Score:</span><span>{highestScore}</span></p>
                                 <p className='text-white flex justify-between w-full px-4'><span>Quizzes Completed:</span><span> {quizzesCompleted}</span></p>
                                 <p className='text-white flex justify-between w-full px-4'><span>Best Category: </span><span>{bestCategory === '' ? "None" : bestCategory}</span></p>
@@ -98,7 +105,7 @@ const Spin = () => {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Spin;

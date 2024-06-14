@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import authContext from '../context/auth/authContext';
 import { Link, useNavigate } from 'react-router-dom';
 import blankprofile from '../assets/blankprofile.jpg';
+import circle from '../assets/circle.png';
 
 const Profile = () => {
     const { checkLogin, loggedInUserData, setIsLogin } = useContext(authContext);
@@ -35,8 +36,17 @@ const Profile = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center pb-8 bg-secondary p-4 md:p-0">
+            <div className='fixed hidden md:flex left-auto md:left-7 top-24 opacity-25 md:opacity-35 overflow-hidden'>
+                <img src={circle} alt="circle-left" className='animate-slow-spin' />
+            </div>
+            <div className='fixed hidden md:flex right-7 top-24 opacity-35 overflow-hidden'>
+                <img src={circle} alt="circle-right" className='animate-slow-spin' />
+            </div>
+            <div className='fixed md:flex justify-center left-auto opacity-25 md:opacity-35 overflow-hidden w-[600px] h-[600px] md:w-full md:h-full z-0'>
+                <img src={circle} alt="circle-center" className='animate-slow-spin w-full h-full md:w-fit' />
+            </div>
             <ToastContainer theme="dark" />
-            <div className="bg-primary p-6 md:p-8 rounded-xl shadow-[0px_0px_20px_0px] shadow-[#30C7D6] w-full max-w-md mt-10 md:mt-20">
+            <div className="bg-primary p-6 md:p-8 rounded-xl shadow-[0px_0px_20px_0px] shadow-[#30C7D6] w-full max-w-md mt-10 md:mt-20 z-30">
                 <label className="text-white text-2xl md:text-3xl flex justify-center items-center mb-4 font-bold">Profile</label>
                 <div className="flex flex-col items-center">
                     <img
@@ -53,7 +63,7 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
-            <div className="bg-primary p-6 md:p-8 rounded-xl shadow-[0px_0px_20px_0px] shadow-[#30C7D6] w-full max-w-md mt-8 md:mt-10">
+            <div className="bg-primary p-6 md:p-8 rounded-xl shadow-[0px_0px_20px_0px] shadow-[#30C7D6] w-full max-w-md mt-8 md:mt-10 z-30">
                 <label className="text-white text-xl md:text-2xl flex justify-center items-center mb-4 font-bold">Activity Summary</label>
                 <div className="text-white text-base md:text-lg">
                     <p className='text-white flex justify-between w-full px-4'><span>Highest Score:</span><span>{highestScore}</span></p>
