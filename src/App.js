@@ -13,7 +13,7 @@ import Quiz from './components/Quiz';
 
 function App() {
   return (
-    <div>
+    <div className='bg-secondary min-h-screen'>
       <Router>
         <AuthState>
           <QuizState>

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import WheelComponent from './Wheel';
 import { Link } from 'react-router-dom';
 import quizContext from '../context/quiz/quizContext';
@@ -6,20 +7,16 @@ import authContext from '../context/auth/authContext';
 import circle from '../assets/circle.png';
 
 const Spin = () => {
-    const segments = [
-        "GK",
-        "History",
-        "Science",
-        "IT",
-        "Economics",
-    ];
+    const segments = ["GK", "History", "Science", "IT", "Economics"];
     const segColors = ["#EE4040", "#F0CF50", "#815CD1", "#3DA5E0", "#34A24F"];
     const { category, setCategory } = useContext(quizContext);
     const { checkLogin, loggedInUserData } = useContext(authContext);
     const [funFact, setFunFact] = useState('');
+    const [isSpinning, setIsSpinning] = useState(false);
 
     const onFinished = (category) => {
         setCategory(category);
+        setIsSpinning(false);
         console.log(category);
     };
 
@@ -46,7 +43,12 @@ const Spin = () => {
     const { highestScore, quizzesCompleted, bestCategory } = calculateAchievements(loggedInUserData);
 
     return (
-        <div className='bg-secondary flex flex-col w-full justify-center items-center min-h-screen pb-10'>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className='bg-secondary flex flex-col w-full justify-center items-center min-h-screen pb-10'
+        >
             <div className='fixed hidden md:flex left-auto md:left-7 top-24 opacity-20 overflow-hidden'>
                 <img src={circle} alt="circle-left" className='animate-slow-spin' />
             </div>
@@ -57,16 +59,31 @@ const Spin = () => {
                 <img src={circle} alt="circle-center" className='animate-slow-spin w-full h-full md:w-fit' />
             </div>
             <div className='flex flex-col items-center xl:w-3/4 w-full z-30'>
-                <div className='flex justify-center items-center font-bold text-[#07E1E6] text-2xl md:text-3xl mt-7 mb-3'>
+                <motion.div
+                    initial={{ scale: 0.8 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className='flex justify-center items-center font-bold text-[#07E1E6] text-2xl md:text-3xl mt-7 mb-3'
+                >
                     Hello {loggedInUserData?.name}!🎯
-                </div>
+                </motion.div>
                 {funFact && (
-                    <div className='text-white font-semibold text-center mb-2 w-2/3 md:w-full'>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        className='text-white font-semibold text-center mb-2 w-2/3 md:w-full'
+                    >
                         <em>"{funFact}"</em>
-                    </div>
+                    </motion.div>
                 )}
                 <div className='flex md:flex-row flex-col w-full justify-around items-center'>
-                    <div className='flex md:w-1/2 w-full justify-center overflow-hidden h-96 md:h-full'>
+                    <motion.div
+                        className='flex md:w-1/2 w-full justify-center overflow-hidden h-96 md:h-full'
+                        initial={{ rotate: 0 }}
+                        animate={{ rotate: isSpinning ? 360 : 0 }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                    >
                         <WheelComponent
                             size={230}
                             segments={segments}
@@ -76,8 +93,9 @@ const Spin = () => {
                             contrastColor="white"
                             buttonText="Spin"
                             isOnlyOnce={false}
+                            onSpinStart={() => setIsSpinning(true)}
                         />
-                    </div>
+                    </motion.div>
                     <div className='flex flex-col justify-center md:w-1/2 w-full items-center'>
                         <div className='flex flex-col items-center'>
                             {
@@ -104,7 +122,7 @@ const Spin = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }
 

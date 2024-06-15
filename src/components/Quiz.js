@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import quizContext from '../context/quiz/quizContext';
 import { questionsData } from '../constants/questionsData';
 import ConfettiExplosion from 'react-confetti-explosion';
 import authContext from '../context/auth/authContext';
 import circle from '../assets/circle.png';
 import { MdOutlineAccessTime } from "react-icons/md";
-
 
 const Quiz = () => {
     const { category } = useContext(quizContext);
@@ -67,7 +67,7 @@ const Quiz = () => {
 
     const submitScore = async (category, score) => {
         try {
-            const response = await fetch('http://localhost:5000/api/auth/submit-score', {
+            const response = await fetch(`${process.env.REACT_APP_HOST}/api/auth/submit-score`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -101,7 +101,12 @@ const Quiz = () => {
     }
 
     return (
-        <div className='bg-secondary flex flex-col justify-center items-center min-h-screen pb-10 px-4 relative'>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className='bg-secondary flex flex-col justify-center items-center min-h-screen pb-10 px-4 relative'
+        >
             <div className='fixed hidden md:flex left-auto md:left-7 top-24 opacity-25 md:opacity-35 overflow-hidden'>
                 <img src={circle} alt="circle-left" className='animate-slow-spin' />
             </div>
@@ -112,7 +117,12 @@ const Quiz = () => {
                 <img src={circle} alt="circle-center" className='animate-slow-spin w-full h-full md:w-fit' />
             </div>
             {showScore ? (
-                <div className='text-2xl flex flex-col justify-center items-center text-white z-30'>
+                <motion.div
+                    initial={{ scale: 0.8 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className='text-2xl flex flex-col justify-center items-center text-white z-30 bg-secondary p-6 rounded-xl border shadow-[0px_0px_20px_0px] shadow-[#30C7D6]'
+                >
                     {score > 5 ? (
                         <div className='font-serif text-2xl md:text-4xl flex flex-col justify-center items-center font-semibold'>
                             <ConfettiExplosion />
@@ -132,9 +142,14 @@ const Quiz = () => {
                     <Link to={'/spin'} className='flex justify-center items-center w-64 bg-primary rounded-xl text-[#07E1E6] p-2 shadow-sm hover:shadow-teal-300 font-bold text-xl border hover:border-transparent mt-6'>
                         Return to Subjects
                     </Link>
-                </div>
+                </motion.div>
             ) : (
-                <div className='flex flex-col justify-center items-center w-full md:w-1/2 border p-4 md:p-20 rounded-xl relative bg-[#392f6f] shadow-lg shadow-teal-800'>
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className='flex flex-col justify-center items-center w-full md:w-1/2 border p-4 md:p-20 rounded-xl relative bg-[#392f6f] shadow-lg shadow-teal-800'
+                >
                     <div className='w-full mb-4 mt-8 relative h-6 bg-gray-200 rounded-lg overflow-hidden'>
                         <div
                             className='h-full bg-teal-500'
@@ -158,18 +173,19 @@ const Quiz = () => {
 
                     <div className='flex flex-col w-full'>
                         {questions[currentQuestionIndex].options.map((option, index) => (
-                            <button
+                            <motion.button
                                 key={index}
+                                whileHover={{ scale: 1.05 }}
                                 className='bg-primary text-white p-2 m-2 w-full rounded-xl hover:shadow-teal-300 shadow-sm'
                                 onClick={() => handleAnswerOptionClick(option === questions[currentQuestionIndex].answer)}
                             >
                                 {option}
-                            </button>
+                            </motion.button>
                         ))}
                     </div>
-                </div>
+                </motion.div>
             )}
-        </div>
+        </motion.div>
     );
 };
 

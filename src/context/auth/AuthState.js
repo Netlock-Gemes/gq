@@ -17,7 +17,7 @@ const AuthState = (props) => {
         }
 
         try {
-            const response = await fetch('http://localhost:5000/api/auth/profile', {
+            const response = await fetch(`${process.env.REACT_APP_HOST}/api/auth/profile`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ const AuthState = (props) => {
 
     const getAllUsersData = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/auth/getUsersData', {
+            const response = await fetch(`${process.env.REACT_APP_HOST}/api/auth/getUsersData`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

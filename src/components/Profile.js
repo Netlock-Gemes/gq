@@ -5,6 +5,7 @@ import authContext from '../context/auth/authContext';
 import { Link, useNavigate } from 'react-router-dom';
 import blankprofile from '../assets/blankprofile.jpg';
 import circle from '../assets/circle.png';
+import { motion } from 'framer-motion';
 
 const Profile = () => {
     const { checkLogin, loggedInUserData, setIsLogin } = useContext(authContext);
@@ -35,7 +36,12 @@ const Profile = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center pb-8 bg-secondary p-4 md:p-0">
+        <motion.div
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            transition={{ duration: 0.5 }}
+            className="min-h-screen flex flex-col items-center pb-8 bg-secondary p-4 md:p-0"
+        >
             <div className='fixed hidden md:flex left-auto md:left-7 top-24 opacity-25 md:opacity-35 overflow-hidden'>
                 <img src={circle} alt="circle-left" className='animate-slow-spin' />
             </div>
@@ -46,7 +52,12 @@ const Profile = () => {
                 <img src={circle} alt="circle-center" className='animate-slow-spin w-full h-full md:w-fit' />
             </div>
             <ToastContainer theme="dark" />
-            <div className="bg-primary p-6 md:p-8 rounded-xl shadow-[0px_0px_20px_0px] shadow-[#30C7D6] w-full max-w-md mt-10 md:mt-20 z-30">
+            <motion.div
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="bg-primary p-6 md:p-8 rounded-xl shadow-[0px_0px_20px_0px] shadow-[#30C7D6] w-full max-w-md mt-10 md:mt-20 z-30"
+            >
                 <label className="text-white text-2xl md:text-3xl flex justify-center items-center mb-4 font-bold">Profile</label>
                 <div className="flex flex-col items-center">
                     <img
@@ -62,16 +73,21 @@ const Profile = () => {
                         <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 text-center">Logout</button>
                     </div>
                 </div>
-            </div>
-            <div className="bg-primary p-6 md:p-8 rounded-xl shadow-[0px_0px_20px_0px] shadow-[#30C7D6] w-full max-w-md mt-8 md:mt-10 z-30">
+            </motion.div>
+            <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="bg-primary p-6 md:p-8 rounded-xl shadow-[0px_0px_20px_0px] shadow-[#30C7D6] w-full max-w-md mt-8 md:mt-10 z-30"
+            >
                 <label className="text-white text-xl md:text-2xl flex justify-center items-center mb-4 font-bold">Activity Summary</label>
                 <div className="text-white text-base md:text-lg">
                     <p className='text-white flex justify-between w-full px-4'><span>Highest Score:</span><span>{highestScore}</span></p>
                     <p className='text-white flex justify-between w-full px-4'><span>Quizzes Completed:</span><span> {quizzesCompleted}</span></p>
                     <p className='text-white flex justify-between w-full px-4'><span>Best Category: </span><span>{bestCategory === '' ? "None" : bestCategory}</span></p>
                 </div>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 };
 

@@ -4,11 +4,14 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import { IoMdClose } from "react-icons/io";
 import 'react-toastify/dist/ReactToastify.css';
+import { motion } from 'framer-motion';
 import authContext from '../context/auth/authContext';
+import circle from '../assets/circle.png';
 
 const Login = () => {
     const { setIsLogin } = useContext(authContext);
     const [credentials, setCredetials] = useState({ email: "", password: "" });
+    const [isLoading, setIsLoading] = useState(false);
     let navigate = useNavigate();
 
     const onChange = (e) => {
@@ -17,26 +20,37 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:5000/api/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(credentials),
-        });
-        setCredetials({ email: "", password: "" });
-        setIsLogin(true);
-        const data = await response.json();
-        if (response.ok) {
-            localStorage.setItem('token', data.token);
-            toast.success("Login successful!", {
+        setIsLoading(true);
+        try {
+            const response = await fetch(`${process.env.REACT_APP_HOST}/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials),
+            });
+    
+            setCredetials({ email: "", password: "" });
+            const data = await response.json();
+    
+            if (response.ok) {
+                setIsLogin(true);
+                localStorage.setItem('token', data.token);
+                toast.success("Login successful!", {
+                    autoClose: 2000,
+                });
+                setTimeout(() => navigate('/'), 2000);
+            } else {
+                toast.error(data.msg || "Login failed. Please try again.", {
+                    autoClose: 2000,
+                });
+            }
+        } catch (error) {
+            toast.error("An unexpected error occurred. Please try again later.", {
                 autoClose: 2000,
             });
-            setTimeout(() => navigate('/'), 2000);
-        } else {
-            toast.error(data.msg || "Login failed. Please try again.", {
-                autoClose: 2000,
-            });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -58,9 +72,28 @@ const Login = () => {
     const [isMsgVisible, setIsMsgVisible] = useState("flex");
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-secondary relative p-4 md:p-0">
+        <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            transition={{ duration: 0.5 }}
+            className="min-h-screen flex items-center justify-center bg-secondary relative p-4 md:p-0"
+        >
             <ToastContainer theme="dark" />
-            <div className="bg-primary p-6 md:p-8 rounded-xl shadow-[0px_0px_20px_0px] shadow-[#30C7D6] w-full max-w-md z-10">
+            <div className='fixed hidden md:flex left-auto md:left-7 top-24 opacity-20 overflow-hidden'>
+                <img src={circle} alt="circle-left" className='animate-slow-spin' />
+            </div>
+            <div className='fixed hidden md:flex right-7 top-24 overflow-hidden opacity-20'>
+                <img src={circle} alt="circle-right" className='animate-slow-spin' />
+            </div>
+            <div className='fixed md:flex justify-center left-auto top-20 opacity-20 overflow-hidden w-[600px] h-[600px] md:w-full md:h-full z-0'>
+                <img src={circle} alt="circle-center" className='animate-slow-spin w-full h-full md:w-fit' />
+            </div>
+            <motion.div 
+                initial={{ scale: 0.8 }} 
+                animate={{ scale: 1 }} 
+                transition={{ duration: 0.5 }}
+                className="bg-primary p-6 md:p-8 rounded-xl shadow-[0px_0px_20px_0px] shadow-[#30C7D6] w-full max-w-md z-10"
+            >
                 <label className={`text-white text-2xl md:text-3xl items-center justify-center form-label transition ease-in-out duration-500 flex mb-4 font-bold`}>Login</label>
                 <form onSubmit={handleSubmit}>
                     {/* Email */}
@@ -92,16 +125,21 @@ const Login = () => {
 
                     {/* Button */}
                     <div className="flex justify-center">
-                        <button type='submit'
-                            className="w-full px-2 py-3 md:py-2.5 bg-blue-600 text-white font-semibold text-lg leading-tight rounded shadow-md md:hover:bg-blue-800 hover:shadow-lg focus:bg-blue-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-600 active:shadow-lg active:text-gray-400 transition duration-150 ease-in-out">
-                            Login
+                        <button type='submit' disabled={isLoading}
+                            className="w-full px-2 py-3 md:py-2.5 bg-blue-600 text-white font-semibold text-lg leading-tight rounded shadow-md md:hover:bg-blue-800 hover:shadow-lg focus:bg-blue-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-600 active:shadow-lg active:text-gray-400 disabled:text-gray-400 disabled:bg-blue-800 transition duration-150 ease-in-out">
+                            {isLoading ? 'Loading...' : 'Login'}
                         </button>
                     </div>
                 </form>
-            </div>
+            </motion.div>
 
             {/* Welcome Message */}
-            <div className={` ${isMsgVisible} flex-col fixed bottom-1 text-center px-4 py-6 bg-white bg-opacity-80 rounded-lg shadow-lg z-10 md:text-lg text-sm`}>
+            <motion.div 
+                initial={{ opacity: 0, y: 50 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ duration: 0.5 }}
+                className={` ${isMsgVisible} flex-col fixed bottom-1 text-center px-4 py-6 bg-white bg-opacity-90 border border-gray-400 rounded-lg shadow-lg z-10 md:text-lg text-sm`}
+            >
                 <div className='flex w-full justify-end '>
                     <button className='text-2xl hover:bg-teal-300/20 mr-2 rounded-md' onClick={() => setIsMsgVisible("hidden")}><IoMdClose /></button>
                 </div>
@@ -109,8 +147,8 @@ const Login = () => {
                 <p className="text-gray-700 mb-4">Join our platform to test your knowledge, earn rewards, and compete with others in a fun and engaging way. Sign up today and start your journey towards becoming a quiz master!</p>
                 <p className="text-gray-700 mb-4">Don't have an account? <Link to="/register" className="text-blue-600 underline">Register here</Link> to get started.</p>
                 <p className="text-gray-700">Already a member? Log in to access your personalized dashboard and continue your learning adventure.</p>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 };
 

@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import authContext from '../context/auth/authContext';
-import logo from '../assets/GamifiedSec.png';
+import logo from '../assets/logo2.png';
 import circle from '../assets/circle.png';
 import { Link } from 'react-router-dom';
-
 
 function Home() {
   const { checkLogin, loggedInUserData, getAllUsersData, allUsersData } = useContext(authContext);
@@ -35,23 +35,48 @@ function Home() {
   };
 
   return (
-    <div className='bg-secondary flex flex-col pt-10 pb-20 justify-center items-center min-h-screen relative'>
+    <motion.div 
+      initial={{ opacity: 0, y: 50 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      transition={{ duration: 0.5 }}
+      className='bg-secondary flex flex-col pt-10 pb-20 justify-center items-center min-h-screen relative'
+    >
       <div className='absolute left-auto md:left-7 top-24 opacity-25 md:opacity-35 overflow-hidden'>
         <img src={circle} alt="circle-left" className='animate-slow-spin' />
       </div>
       <div className='hidden md:block absolute right-7 top-24 opacity-35 overflow-hidden'>
         <img src={circle} alt="circle-left" className='animate-slow-spin' />
       </div>
-      <div className='w-2/3 md:w-fit'>
+      <motion.div 
+        initial={{ scale: 0.8 }} 
+        animate={{ scale: 1 }} 
+        transition={{ duration: 0.5 }}
+        className='w-2/3 md:w-fit'
+      >
         <img src={logo} alt="Logo" />
-      </div>
-      <div className='flex justify-center items-center font-bold text-[#07E1E6] text-2xl md:text-3xl mt-7 mb-3'>
+      </motion.div>
+      <motion.div 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className='flex justify-center items-center font-bold text-[#07E1E6] text-2xl md:text-3xl mt-7 mb-3'
+      >
         Welcome {loggedInUserData?.name}!🕹️
-      </div>
-      <div className='flex md:w-1/4 w-1/2 mt-1 z-30'>
+      </motion.div>
+      <motion.div 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className='flex md:w-1/4 w-1/2 mt-1 z-30'
+      >
         <Link to={'/spin'} className='flex justify-center items-center bg-primary rounded-xl text-[#07E1E6] p-2 w-full shadow-sm hover:shadow-teal-300 font-bold text-xl border hover:border-transparent md:text-2xl'>Start Game</Link>
-      </div>
-      <div className='flex flex-col border-2 items-center justify-center mt-20 lg:w-1/3 w-2/3 rounded-xl z-30'>
+      </motion.div>
+      <motion.div 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ duration: 0.5, delay: 0.6 }}
+        className='flex flex-col border-2 items-center justify-center mt-20 lg:w-1/3 w-2/3 rounded-xl z-30'
+      >
         <span className='text-[#F0EEF2] font-bold text-2xl mt-2'>Leaderboard</span>
         <select
           className='mt-2 mb-2 px-4 py-1.5 rounded-lg bg-white border-transparent focus:outline-none'
@@ -65,8 +90,8 @@ function Home() {
           <option value="gk">GK</option>
         </select>
         {renderLeaderboard()}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
