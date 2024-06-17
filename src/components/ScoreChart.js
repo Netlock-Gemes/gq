@@ -21,10 +21,37 @@ const ScoreChart = ({ score, totalQuestions }) => {
         plugins: {
             legend: {
                 position: 'top',
+                labels: {
+                    color: '#ffffff'
+                },
             },
             title: {
                 display: true,
-                text: 'Quiz Results',
+                text: 'Score Chart',
+                color: '#ffffff',
+            },
+            tooltip: {
+                titleColor: '#ffffff',
+                bodyColor: '#ffffff',
+                backgroundColor: 'rgba(0, 0, 0, 0.7)'
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: '#ffffff',
+                },
+                grid: {
+                    color: '#444444',
+                },
+            },
+            y: {
+                ticks: {
+                    color: '#ffffff',
+                },
+                grid: {
+                    color: '#444444',
+                },
             },
         },
     };

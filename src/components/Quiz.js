@@ -7,7 +7,7 @@ import ConfettiExplosion from 'react-confetti-explosion';
 import authContext from '../context/auth/authContext';
 import circle from '../assets/circle.png';
 import { MdOutlineAccessTime } from "react-icons/md";
-import ScoreChart from './ScoreChart';  // Import the ScoreChart component
+import ScoreChart from './ScoreChart';
 
 const Quiz = () => {
     const { category } = useContext(quizContext);
@@ -126,22 +126,22 @@ const Quiz = () => {
                     initial={{ scale: 0.8 }}
                     animate={{ scale: 1 }}
                     transition={{ duration: 0.5 }}
-                    className='text-2xl flex flex-col justify-center items-center text-white z-30 bg-secondary px-2 py-5 md:p-6 xl:p-10 rounded-xl border shadow-[0px_0px_20px_0px] shadow-[#30C7D6]'
+                    className='text-2xl flex flex-col justify-center items-center text-white z-30 bg-secondary px-2 py-5 md:p-6 xl:p-10 rounded-xl border shadow-[0px_0px_20px_0px] shadow-[#30C7D6] md:w-1/3'
                 >
                     {score > 5 ? (
                         <div className='font-serif text-xl md:text-3xl flex flex-col justify-center items-center font-semibold'>
                             <ConfettiExplosion />
                             <span className='text-green-400'>Congrats {loggedInUserData?.name} 🎉</span>
                             <span className='text-center my-2'>You scored <span className='text-green-400'>{score}</span> out of {questions.length}</span>
-                            <span className='text-base font-sans'>Try your skills in different subjects</span>
-                            <span className='font-sans text-xl mt-3'>⬇️Play Again⬇️</span>
+                            <span className='text-base font-sans text-center text-gray-300'>Try your skills in different subjects</span>
+                            <span className='font-sans text-xl mt-3'>⬇️Quiz Result⬇️</span>
                         </div>
                     ) : (
                         <div className='font-serif text-xl md:text-3xl flex flex-col justify-center items-center font-semibold'>
                             <span className='text-red-600'>Too Bad {loggedInUserData?.name} 😔</span>
                             <span className='text-center my-2'>You only scored <span className='text-red-600'>{score}</span> out of {questions.length}</span>
                             <span className='text-base font-sans'>You need to work on your skills</span>
-                            <span className='font-sans text-xl mt-3'>⬇️Try Again⬇️</span>
+                            <span className='font-sans text-xl mt-3'>⬇️Quiz Result⬇️</span>
                         </div>
                     )}
 
@@ -187,11 +187,15 @@ const Quiz = () => {
                             <motion.button
                                 key={index}
                                 whileHover={{ scale: 1.05 }}
-                                className={`bg-primary text-white p-2 m-2 w-full rounded-xl hover:shadow-teal-300 shadow-sm ${selectedOptionIndex === index
-                                    ? option === questions[currentQuestionIndex].answer
-                                        ? 'bg-green-500'
-                                        : 'bg-red-500'
-                                    : ''
+                                className={`p-2 m-2 w-full text-white rounded-xl hover:shadow-teal-300 shadow-sm ${selectedOptionIndex === null
+                                        ? 'bg-primary'
+                                        : index === selectedOptionIndex
+                                            ? option === questions[currentQuestionIndex].answer
+                                                ? 'bg-green-600'
+                                                : 'bg-red-600'
+                                            : option === questions[currentQuestionIndex].answer
+                                                ? 'bg-green-600 opacity-50'
+                                                : 'bg-red-600 opacity-50'
                                     }`}
                                 onClick={() => handleAnswerOptionClick(option === questions[currentQuestionIndex].answer, index)}
                                 disabled={answerSubmitted}
@@ -199,9 +203,10 @@ const Quiz = () => {
                                 {option}
                             </motion.button>
                         ))}
+
                     </div>
                     <button
-                        className='flex justify-center items-center md:w-64 w-1/2 bg-primary rounded-xl text-[#07E1E6] p-2 shadow-sm hover:shadow-teal-300 font-bold text-base md:text-xl border hover:border-transparent mt-4 disabled:text-opacity-30 disabled:hover:border-white disabled:hover:shadow-none'
+                        className='flex justify-center items-center md:w-56 w-1/2 bg-primary rounded-xl text-[#07E1E6] p-2 shadow-sm hover:shadow-teal-300 font-bold text-base md:text-lg border hover:border-transparent mt-4 disabled:text-opacity-30 disabled:hover:border-white disabled:hover:shadow-none'
                         onClick={handleNextQuestion}
                         disabled={!answerSubmitted}
                     >
