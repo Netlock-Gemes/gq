@@ -7,6 +7,7 @@ import ConfettiExplosion from 'react-confetti-explosion';
 import authContext from '../context/auth/authContext';
 import circle from '../assets/circle.png';
 import { MdOutlineAccessTime } from "react-icons/md";
+import ScoreChart from './ScoreChart';  // Import the ScoreChart component
 
 const Quiz = () => {
     const { category } = useContext(quizContext);
@@ -16,6 +17,8 @@ const Quiz = () => {
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(60);
     const { checkLogin, loggedInUserData } = useContext(authContext);
+    const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
+    const [answerSubmitted, setAnswerSubmitted] = useState(false);
 
     const questions = questionsData[category] || [];
 
@@ -34,14 +37,14 @@ const Quiz = () => {
         checkLogin();
     }, []);
 
-    const handleAnswerOptionClick = (isCorrect) => {
+    const handleAnswerOptionClick = (isCorrect, index) => {
         const updatedSelectedAnswers = [...selectedAnswers];
         updatedSelectedAnswers[currentQuestionIndex] = isCorrect;
         setSelectedAnswers(updatedSelectedAnswers);
-        if (currentQuestionIndex < questions.length - 1) {
-            handleNextQuestion();
-        } else {
-            calculateScore(updatedSelectedAnswers);
+        setSelectedOptionIndex(index);
+        setAnswerSubmitted(true);
+        if (isCorrect) {
+            setScore(prevScore => prevScore + 1);
         }
     };
 
@@ -49,6 +52,8 @@ const Quiz = () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(prevIndex => prevIndex + 1);
             setTimeLeft(60);
+            setSelectedOptionIndex(null);
+            setAnswerSubmitted(false);
         } else {
             calculateScore(selectedAnswers);
         }
@@ -121,25 +126,27 @@ const Quiz = () => {
                     initial={{ scale: 0.8 }}
                     animate={{ scale: 1 }}
                     transition={{ duration: 0.5 }}
-                    className='text-2xl flex flex-col justify-center items-center text-white z-30 bg-secondary p-6 rounded-xl border shadow-[0px_0px_20px_0px] shadow-[#30C7D6]'
+                    className='text-2xl flex flex-col justify-center items-center text-white z-30 bg-secondary px-2 py-5 md:p-6 xl:p-10 rounded-xl border shadow-[0px_0px_20px_0px] shadow-[#30C7D6]'
                 >
                     {score > 5 ? (
-                        <div className='font-serif text-2xl md:text-4xl flex flex-col justify-center items-center font-semibold'>
+                        <div className='font-serif text-xl md:text-3xl flex flex-col justify-center items-center font-semibold'>
                             <ConfettiExplosion />
                             <span className='text-green-400'>Congrats {loggedInUserData?.name} 🎉</span>
-                            <span>You scored <span className='text-green-400'>{score}</span> out of {questions.length}</span>
+                            <span className='text-center my-2'>You scored <span className='text-green-400'>{score}</span> out of {questions.length}</span>
                             <span className='text-base font-sans'>Try your skills in different subjects</span>
                             <span className='font-sans text-xl mt-3'>⬇️Play Again⬇️</span>
                         </div>
                     ) : (
-                        <div className='font-serif text-2xl md:text-4xl flex flex-col justify-center items-center font-semibold'>
+                        <div className='font-serif text-xl md:text-3xl flex flex-col justify-center items-center font-semibold'>
                             <span className='text-red-600'>Too Bad {loggedInUserData?.name} 😔</span>
-                            <span>You only scored <span className='text-red-600'>{score}</span> out of {questions.length}</span>
+                            <span className='text-center my-2'>You only scored <span className='text-red-600'>{score}</span> out of {questions.length}</span>
                             <span className='text-base font-sans'>You need to work on your skills</span>
                             <span className='font-sans text-xl mt-3'>⬇️Try Again⬇️</span>
                         </div>
                     )}
-                    <Link to={'/spin'} className='flex justify-center items-center w-64 bg-primary rounded-xl text-[#07E1E6] p-2 shadow-sm hover:shadow-teal-300 font-bold text-xl border hover:border-transparent mt-6'>
+
+                    <ScoreChart score={score} totalQuestions={questions.length} />
+                    <Link to={'/spin'} className='flex justify-center items-center w-44 md:w-64 bg-primary rounded-xl text-[#07E1E6] p-2 shadow-sm hover:shadow-teal-300 font-bold text-base md:text-xl border hover:border-transparent mt-6'>
                         Return to Subjects
                     </Link>
                 </motion.div>
@@ -159,12 +166,16 @@ const Quiz = () => {
                         />
                     </div>
 
-                    <div className='absolute top-4 left-4 text-white'>
+                    <div className='absolute top-4 left-4 text-white text-sm md:text-base'>
                         Question: <span className='font-semibold text-green-400'>{currentQuestionIndex + 1}</span>
                     </div>
 
-                    <div className='absolute flex justify-center items-center top-4 right-4 text-white'>
-                        Time <MdOutlineAccessTime className='mx-1 h-5 w-5' /> Left: <span className='font-semibold ml-1 text-green-400 w-15'>{timeLeft} sec</span>
+                    <div className='absolute top-4 left-1/2 transform -translate-x-1/2 text-white text-sm md:text-base'>
+                        Score: <span className='font-semibold text-green-400'>{score}</span>
+                    </div>
+
+                    <div className='absolute flex justify-center items-center top-4 right-4 text-white text-sm md:text-base'>
+                        Time<MdOutlineAccessTime className='mx-1 h-5 w-5 hidden md:hidden' /><span className='hidden md:block'>-Left</span>:<span className='font-semibold ml-1 text-green-400 w-15'>{timeLeft} sec</span>
                     </div>
 
                     <div className='text-2xl text-white mb-4'>
@@ -176,13 +187,26 @@ const Quiz = () => {
                             <motion.button
                                 key={index}
                                 whileHover={{ scale: 1.05 }}
-                                className='bg-primary text-white p-2 m-2 w-full rounded-xl hover:shadow-teal-300 shadow-sm'
-                                onClick={() => handleAnswerOptionClick(option === questions[currentQuestionIndex].answer)}
+                                className={`bg-primary text-white p-2 m-2 w-full rounded-xl hover:shadow-teal-300 shadow-sm ${selectedOptionIndex === index
+                                    ? option === questions[currentQuestionIndex].answer
+                                        ? 'bg-green-500'
+                                        : 'bg-red-500'
+                                    : ''
+                                    }`}
+                                onClick={() => handleAnswerOptionClick(option === questions[currentQuestionIndex].answer, index)}
+                                disabled={answerSubmitted}
                             >
                                 {option}
                             </motion.button>
                         ))}
                     </div>
+                    <button
+                        className='flex justify-center items-center md:w-64 w-1/2 bg-primary rounded-xl text-[#07E1E6] p-2 shadow-sm hover:shadow-teal-300 font-bold text-base md:text-xl border hover:border-transparent mt-4 disabled:text-opacity-30 disabled:hover:border-white disabled:hover:shadow-none'
+                        onClick={handleNextQuestion}
+                        disabled={!answerSubmitted}
+                    >
+                        {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Submit'}
+                    </button>
                 </motion.div>
             )}
         </motion.div>
