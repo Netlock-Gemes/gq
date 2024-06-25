@@ -161,7 +161,7 @@ const Register = () => {
                 </div>
                 <h2 className="md:text-3xl text-2xl font-bold text-blue-600 mb-4">Welcome to Gamified Quiz!</h2>
                 <p className="text-gray-700 mb-4">Join our platform to test your knowledge, earn rewards, and compete with others in a fun and engaging way. Sign up today and start your journey towards becoming a quiz master!</p>
-                <p className="text-gray-700 mb-4">Don't have an account? <Link to="/register" className="text-blue-600 underline">Register here</Link> to get started.</p>
+                <p className="text-gray-700 mb-4">Already have an account? <Link to="/login" className="text-blue-600 underline">Login here</Link> to get started.</p>
                 <p className="text-gray-700">Already a member? Log in to access your personalized dashboard and continue your learning adventure.</p>
             </motion.div>
         </motion.div>
