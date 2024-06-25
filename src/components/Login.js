@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
-import { IoMdClose } from "react-icons/io";
 import 'react-toastify/dist/ReactToastify.css';
 import { motion } from 'framer-motion';
 import authContext from '../context/auth/authContext';
@@ -29,10 +28,10 @@ const Login = () => {
                 },
                 body: JSON.stringify(credentials),
             });
-    
+
             setCredetials({ email: "", password: "" });
             const data = await response.json();
-    
+
             if (response.ok) {
                 setIsLogin(true);
                 localStorage.setItem('token', data.token);
@@ -69,12 +68,10 @@ const Login = () => {
         }
     };
 
-    const [isMsgVisible, setIsMsgVisible] = useState("flex");
-
     return (
-        <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
             className="min-h-screen flex items-center justify-center bg-secondary relative p-4 md:p-0"
         >
@@ -88,9 +85,9 @@ const Login = () => {
             <div className='fixed md:flex justify-center left-auto top-20 opacity-20 overflow-hidden w-[600px] h-[600px] md:w-full md:h-full z-0'>
                 <img src={circle} alt="circle-center" className='animate-slow-spin w-full h-full md:w-fit' />
             </div>
-            <motion.div 
-                initial={{ scale: 0.8 }} 
-                animate={{ scale: 1 }} 
+            <motion.div
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
                 transition={{ duration: 0.5 }}
                 className="bg-primary p-6 md:p-8 rounded-xl shadow-[0px_0px_20px_0px] shadow-[#30C7D6] w-full max-w-md z-10"
             >
@@ -131,22 +128,6 @@ const Login = () => {
                         </button>
                     </div>
                 </form>
-            </motion.div>
-
-            {/* Welcome Message */}
-            <motion.div 
-                initial={{ opacity: 0, y: 50 }} 
-                animate={{ opacity: 1, y: 0 }} 
-                transition={{ duration: 0.5 }}
-                className={` ${isMsgVisible} flex-col fixed bottom-1 text-center px-4 py-6 bg-white bg-opacity-90 border border-gray-400 rounded-lg shadow-lg z-10 md:text-lg text-sm`}
-            >
-                <div className='flex w-full justify-end '>
-                    <button className='text-2xl hover:bg-teal-300/20 mr-2 rounded-md' onClick={() => setIsMsgVisible("hidden")}><IoMdClose /></button>
-                </div>
-                <h2 className="md:text-3xl text-2xl font-bold text-blue-600 mb-4">Welcome to Gamified Quiz!</h2>
-                <p className="text-gray-700 mb-4">Join our platform to test your knowledge, earn rewards, and compete with others in a fun and engaging way. Sign up today and start your journey towards becoming a quiz master!</p>
-                <p className="text-gray-700 mb-4">Don't have an account? <Link to="/register" className="text-blue-600 underline">Register here</Link> to get started.</p>
-                <p className="text-gray-700">Already a member? Log in to access your personalized dashboard and continue your learning adventure.</p>
             </motion.div>
         </motion.div>
     );

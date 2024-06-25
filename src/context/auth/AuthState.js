@@ -11,7 +11,7 @@ const AuthState = (props) => {
     const getLoggedInUserData = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
-            navigate('/login');
+            navigate('/register');
             setIsLogin(false);
             return;
         }
@@ -32,11 +32,11 @@ const AuthState = (props) => {
                 setLoggedInUserData(data);
             } else {
                 console.log(data);
-                navigate('/login');
+                navigate('/register');
             }
         } catch (error) {
             console.error('Error fetching profile data:', error);
-            navigate('/login');
+            navigate('/register');
         }
     };
 

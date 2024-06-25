@@ -32,7 +32,7 @@ const Profile = () => {
     const handleLogout = () => {
         setIsLogin(false);
         localStorage.clear();
-        navigate('/login');
+        navigate('/register');
     };
 
     return (
