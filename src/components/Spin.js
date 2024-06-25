@@ -20,11 +20,20 @@ const Spin = () => {
         console.log(category);
     };
 
+    const fetchFact = async () => {
+        try {
+            const response = await fetch('https://api.quotable.io/random?tags=knowledge');
+            const data = await response.json();
+            setFunFact(data.content);
+        } catch (error) {
+            console.log("Failed to fetch quote");
+        }
+    }
+    
+
     useEffect(() => {
         checkLogin();
-        fetch('https://api.quotable.io/random?tags=knowledge')
-            .then(response => response.json())
-            .then(data => setFunFact(data.content));
+        fetchFact();
         // eslint-disable-next-line
     }, []);
 
