@@ -9,18 +9,33 @@ import circle from '../assets/circle.png';
 import { MdOutlineAccessTime } from "react-icons/md";
 import ScoreChart from './ScoreChart';
 
+const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+};
+
 const Quiz = () => {
     const { category } = useContext(quizContext);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [selectedAnswers, setSelectedAnswers] = useState(Array.from({ length: questionsData[category]?.length || 0 }, () => null));
+    const [selectedAnswers, setSelectedAnswers] = useState([]);
     const [showScore, setShowScore] = useState(false);
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(60);
     const { checkLogin, loggedInUserData } = useContext(authContext);
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
     const [answerSubmitted, setAnswerSubmitted] = useState(false);
+    const [questions, setQuestions] = useState([]);
 
-    const questions = questionsData[category] || [];
+    useEffect(() => {
+        if (category) {
+            const selectedQuestions = shuffleArray([...questionsData[category]]).slice(0, 10);
+            setQuestions(selectedQuestions);
+            setSelectedAnswers(Array.from({ length: selectedQuestions.length }, () => null));
+        }
+    }, [category]);
 
     useEffect(() => {
         if (questions.length > 0 && timeLeft > 0) {
